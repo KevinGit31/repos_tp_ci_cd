@@ -1,0 +1,7 @@
+-
+  name: Playbook deploy via ansible
+  hosts: group_env_deploy #hosts represente les hosts def dans targets.txt avec l'alias group1
+
+  tasks:
+    - name: Test ping
+      ping:
