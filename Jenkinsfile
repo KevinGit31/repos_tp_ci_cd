@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        imagename = "kevin31300/app_game_python"
+        imagename = 'kevin31300/app_game_python'
         registryCredential = 'kevin_docker_hub_token'
         dockerImage = ''
     }
@@ -14,7 +14,7 @@ pipeline {
         stage('build app python') {
             steps{
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build imagename + ":$BUILD_NUMBER"
                 }
             }
         }
