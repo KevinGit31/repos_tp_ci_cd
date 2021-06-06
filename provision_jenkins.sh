@@ -132,6 +132,7 @@ ps_install_docker() {
 	  
 	apt-get update
 	apt-get install -y docker-ce docker-ce-cli containerd.io
+	usermod -aG docker jenkins
 }
 
 
@@ -173,4 +174,6 @@ ps_display_initialAdminPassword
 ps_display_ipadress_machine
 echo ""
 echo "Success"
+echo "A reboot is required !!"
+
 

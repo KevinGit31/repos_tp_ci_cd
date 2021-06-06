@@ -22,12 +22,18 @@ pipeline {
                 sh "curl http://172.30.1.15:5000 |  grep -i 'Hello world DevOps!'"
                 sh 'echo $?'
                 sh 'sleep 4'
-                sh 'docker stop hs'
+                sh 'docker stop app_python_test'
+                sh 'sleep 6'
             }
         }
         stage('push image docker on dockerhub') {
             steps {
                 sh 'docker push kevin31300/app_game_python'
+            }
+        }
+        stage('purge image docker after test & push on dockerhub') {
+            steps {
+                sh 'docker image rm kevin31300/app_game_python'
             }
         }
         stage('deploy') {
