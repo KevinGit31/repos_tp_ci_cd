@@ -14,8 +14,14 @@ pipeline {
         stage('build app python') {
             steps{
                 script {
-                    dockerImage = docker.build imagename + ":$BUILD_NUMBER"
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
+            }
+        }
+        stage('test keke') {
+            steps {
+                sh "C'est keke"
+                sh 'echo $dockerImage'
             }
         }
         stage('run app python') {
@@ -44,12 +50,12 @@ pipeline {
         }
         stage('purge image docker after test & push on dockerhub') {
             steps {
-                sh 'docker image rm kevin31300/app_game_python'
+                sh 'docker image rm $imagename:$BUILD_NUMBER'
             }
         }
         stage('deploy') {
             steps {
-                sh "docker rm $imagename:$BUILD_NUMBER"
+                sh 'ansible-playbook -i hosts.txt playbook-deploy.yml'
             }
         }
     }
