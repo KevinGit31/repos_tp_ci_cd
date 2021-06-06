@@ -1,4 +1,9 @@
 pipeline {
+    environment {
+        imagename = "kevin31300/app_game_python"
+        registryCredential = 'kevin_docker_hub_token'
+        dockerImage = ''
+    }
   agent any
   stages {
         stage('git') {
@@ -7,13 +12,15 @@ pipeline {
           }
         }
         stage('build app python') {
-            steps {
-                sh 'docker build -t kevin31300/app_game_python .'
+            steps{
+                script {
+                    dockerImage = docker.build imagename + ":$BUILD_NUMBER"
+                }
             }
         }
         stage('run app python') {
             steps {
-                sh 'docker run --rm --name app_python_test -d -p 5000:5000 kevin31300/app_game_python'
+                sh 'docker run --rm --name app_python_test -d -p 5000:5000 $imagename:$BUILD_NUMBER'
             }
         }
         stage('test app python') {
@@ -26,9 +33,13 @@ pipeline {
                 sh 'sleep 6'
             }
         }
-        stage('push image docker on dockerhub') {
-            steps {
-                sh 'docker push kevin31300/app_game_python'
+        stage('push image docker on dockerhub after test') {
+            steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push()
+                    }
+                }
             }
         }
         stage('purge image docker after test & push on dockerhub') {
@@ -38,7 +49,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'ansible-playbook -i hosts.txt playbook-deploy.yml'
+                sh "docker rm $imagename:$BUILD_NUMBER"
             }
         }
     }
