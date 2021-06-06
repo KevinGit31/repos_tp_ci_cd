@@ -29,6 +29,7 @@ Vagrant.configure("2") do |config|
 
 		# Provisioning
 		envdeploy.vm.provision :shell, :path => "provision_deploy.sh"
+		envdeploy.vm.provision :shell, :path => "provision_deploy_create_user_jenkins.sh"
 	end
  
 end
