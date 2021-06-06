@@ -18,12 +18,6 @@ pipeline {
                 }
             }
         }
-        stage('test keke') {
-            steps {
-                sh 'helloooooo'
-                sh 'echo $dockerImage'
-            }
-        }
         stage('run app python') {
             steps {
                 sh 'docker run --rm --name app_python_test -d -p 5000:5000 $imagename:$BUILD_NUMBER'
