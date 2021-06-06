@@ -20,7 +20,7 @@ pipeline {
         }
         stage('test keke') {
             steps {
-                sh "C'est keke"
+                sh 'helloooooo'
                 sh 'echo $dockerImage'
             }
         }
