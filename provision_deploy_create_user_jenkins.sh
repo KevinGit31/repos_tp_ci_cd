@@ -32,6 +32,10 @@ ps_create_update_user_jenkins(){
       sudo useradd -d $HOME_BASE$USER_JOB_JENKINS -s /bin/bash -m $USER_JOB_JENKINS
       echo "$USER_JOB_JENKINS:$USER_JOB_JENKINS" | sudo chpasswd
       [ $? -eq 0 ] && echo "User $USER_JOB_JENKINS has been added !" || echo "Failed !"
+	  sudo cp /etc/sudoers /etc/sudoers.old
+	  echo " " | sudo tee -a /etc/sudoers
+	  echo "# Add privilege root to user jenkins " | sudo tee -a /etc/sudoers
+      echo "$USER_JOB_JENKINS ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
     fi
 }
 

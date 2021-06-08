@@ -47,9 +47,14 @@ pipeline {
                 sh 'docker image rm $imagename:$BUILD_NUMBER'
             }
         }
+		stage('prep deploy') {
+            steps {
+                sh "sed -i 's/APP_VERSION_LAST_BUILD/$BUILD_NUMBER/g' playbook-deploy.yml"
+            }
+        }
         stage('deploy') {
             steps {
-                sh 'ansible-playbook -i hosts.txt playbook-deploy.yml'
+                sh "ansible-playbook -i hosts.txt playbook-deploy.yml --extra-vars 'ansible_sudo_pass=jenkins'"
             }
         }
     }
