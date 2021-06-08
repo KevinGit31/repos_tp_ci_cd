@@ -5,6 +5,9 @@
   vars:
     directory_deploy: "deploy"
     file_yaml: "game-dpl.yml"
+    APP_VERSION: "APP_VERSION_LAST_BUILD"
+    path_deploy: "/home/jenkins/"
+    
   tasks:
     - name: Test ping
       ping:
@@ -15,5 +18,8 @@
     - name: copy file
       copy: src={{file_yaml}} dest={{directory_deploy}}
         
-    - name: Deploy application
-      shell: sed "s/{{APP_VERSION}}/2/g" game-dpl.yml | kubectl apply -f
+    - name: Deploy application v1
+      shell: sed -i "s/APP_VERSION/{{APP_VERSION}}/g" {{path_deploy}}{{directory_deploy}}/game-dpl.yml
+    
+    - name: Deploy application v2
+      shell: kubectl apply -f {{path_deploy}}{{directory_deploy}}/game-dpl.yml
