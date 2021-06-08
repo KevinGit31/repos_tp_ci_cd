@@ -14,3 +14,15 @@ Le document va se présenter en 3 parties:
 2. Installation de notre serveur jenkins sur l'interface web
 3. Fonctionnement du CI/CD
 
+## Information sur notre environnement CI/CD
+|Serveurs  | Noms Serveurs Vagrant |     @IP    | Port |
+| ------------- |:-------------:|:-------------|-----------------------|
+| Master     | envjenkins    |   172.30.1.15            | |
+| target      | envdeply     |   172.30.1.16            |  |
+
+## Comment fonctionne notre chaine d'intégration
+
+### Architecture Applicative
+
+![Architecture Applicative.](https://raw.githubusercontent.com/KevinGit31/depot-application-python_v1/readme/diagramme/Architecture_Applicative.png "Diagramme.")
+

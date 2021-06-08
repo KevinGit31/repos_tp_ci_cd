@@ -1,7 +1,20 @@
 -
   name: Playbook deploy via ansible
   hosts: group_env_deploy #hosts represente les hosts def dans targets.txt avec l'alias group1
-
+  vars:
+    directory_deploy:
+      - deploy
   tasks:
     - name: Test ping
+      ping:
+    
+    - name: create folder
+      file: path={{item}} state=directory
+      loop: "{{directory_deploy}}"
+
+    - name: copy file
+      copy: src='some file yml' dest={{directory_deploy}} owner={{item}}
+      loop: "{{directory_deploy}}"
+        
+    - name: Deploy application test
       ping:
