@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 		envdeploy.vm.box = "ubuntu/bionic64"
 		envdeploy.vm.provider "virtualbox" do |vb|
 			vb.memory = 2048
-			vb.cpus = 1
+			vb.cpus = 2
 		end
 
 		envdeploy.vm.network "private_network", ip: "172.30.1.16"
