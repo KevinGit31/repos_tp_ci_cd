@@ -57,5 +57,11 @@ pipeline {
                 sh "ansible-playbook -i hosts.txt playbook-deploy.yml --extra-vars 'ansible_sudo_pass=jenkins'"
             }
         }
+		stage('after deploy') {
+            steps {
+				sh 'echo waiting for pod & service is up'
+                sh 'sleep 10'
+            }
+        }
     }
 }

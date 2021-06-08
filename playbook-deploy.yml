@@ -12,14 +12,14 @@
     - name: Test ping
       ping:
     
-    - name: create folder
+    - name: Create folder
       file: path={{directory_deploy}} state=directory
 
-    - name: copy file
+    - name: Copy file yaml
       copy: src={{file_yaml}} dest={{directory_deploy}}
         
-    - name: Deploy application v1
+    - name: Update version application to use in game-dpl
       shell: sed -i "s/APP_VERSION/{{APP_VERSION}}/g" {{path_deploy}}{{directory_deploy}}/game-dpl.yml
     
-    - name: Deploy application v2
+    - name: Deploy application
       shell: kubectl apply -f {{path_deploy}}{{directory_deploy}}/game-dpl.yml

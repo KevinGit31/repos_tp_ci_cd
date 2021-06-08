@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: game
-          image: kevin31300/app_game_python:{{APP_VERSION}}
+          image: kevin31300/app_game_python:APP_VERSION
           imagePullPolicy: Always
 
 
