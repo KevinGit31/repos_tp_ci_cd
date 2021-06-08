@@ -7,10 +7,20 @@ set -e # en cas d'erreur (code de retour non-zero) arreter le script
 USER_JOB_JENKINS="jenkins"
 HOME_BASE="/home/"
 HOME_JENKINS="${HOME_BASE}${USER_JOB_JENKINS}"
+
+# Vérifier que le script est lancé en tant que root
+ps_assert_root(){
+	REAL_ID="$(id -u)"
+	if [ "$REAL_ID" -ne 0 ]; then
+		1>&2 echo "ERREUR: Le script doit etre exécuté en tant que root"
+		exit 1
+	fi
+}
+
 ps_verif_user_jenkins_exist(){
     if id "$USER_JOB_JENKINS" 2>/dev/null ; then
         echo "$HOME_JENKINS exist we have to delete it"
-        sudo userdel $USER_JOB_JENKINS
+        sudo userdel userjenkins
         sudo rm -rf $HOME_JENKINS
     fi
 }
@@ -29,7 +39,11 @@ ps_authorize_copy_ssh(){
 	sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 	systemctl restart sshd.service
 }
-### debut du script
+
+### POINT D'ENTRER DU SCRIPT ###
+
+## Vérifier que le script est lancé en tant que root
+ps_assert_root
 # verify if user jenkins exist
 ps_verif_user_jenkins_exist
 # create user jenkins

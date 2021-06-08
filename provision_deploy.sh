@@ -31,5 +31,12 @@ ps_install_kubernetes() {
 	ps_check_install_packages kubectl
 }
 
+### POINT D'ENTRER DU SCRIPT ###
+
+## Vérifier que le script est lancé en tant que root
 ps_assert_root
+
+# install env kub
 ps_install_kubernetes
+
+echo "Success"

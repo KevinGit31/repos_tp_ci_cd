@@ -8,14 +8,9 @@ set -e # en cas d'erreur (code de retour non-zero) arreter le script
 # fonctions, variables, etc.
 # afin d'eviter les collisions, je vais préfixer mes fonction par ps_
 # ps égale Poste
-PACKAGES_LIST="gnupg gnupg2 gnupg1 openjdk-11-jdk ufw jenkins ansible python3 python3-dev python3-pip git"
+PACKAGES_LIST="gnupg gnupg2 gnupg1 openjdk-11-jdk ufw jenkins ansible python3 python3-dev python3-pip git sshpass"
 JENKINS_PACKAGE="jenkins"
 SECRET_DIRECTORY="/var/lib/jenkins/secrets/initialAdminPassword"
-USER_JOB_JENKINS="userjob"
-HOME_BASE="/home/"
-HOME_JENKINS="${HOME_BASE}${USER_JOB_JENKINS}"
-PARTITION_EXT4="/dev/sdb1"
-STORAGE="/storage"
 
 # Afficher de l'aide
 ps_help(){
@@ -83,27 +78,6 @@ ps_init_firewall(){
 	ufw enable <<<y
 }
 
-ps_create_update_user_jenkins(){
-    if ! id "$USER_JOB_JENKINS" 2>/dev/null ; then
-      echo "$USER_JOB_JENKINS doit être créé"
-      # on creer le nouvel utilisateur
-      sudo useradd -d $HOME_BASE$USER_JOB_JENKINS -s /bin/bash -m $USER_JOB_JENKINS
-      echo "$USER_JOB_JENKINS:$USER_JOB_JENKINS" | sudo chpasswd
-      [ $? -eq 0 ] && echo "User $USER_JOB_JENKINS has been added !" || echo "Failed !"
-      # rajout des droits
-      sudo cp /etc/sudoers /etc/sudoers.old
-      echo "$USER_JOB_JENKINS ALL=(ALL) /usr/bin/apt" | sudo tee -a /etc/sudoers
-    fi
-}
-
-ps_verif_user_jenkins_exist(){
-    if id "$USER_JOB_JENKINS" 2>/dev/null ; then
-        echo "$HOME_JENKINS exist we have to delete it"
-        sudo userdel userjenkins
-        sudo rm -rf $HOME_JENKINS
-    fi
-}
-
 # function to show the user the secret password jenkins
 ps_display_initialAdminPassword(){
     echo "*******************************"
@@ -118,7 +92,7 @@ ps_display_ipadress_machine(){
     echo "Adresse ip serveur jenkins"
     echo "Veuillez notez votre IP quelque part"
     # Cette command permet de récupérer l'adresse ip de la machine après un ip on va filtrer
-    ip a | grep eth1 | grep inet | awk -F "/" '{print $1}' | awk -F " " '{print $2}'
+    hostname -I | awk '{print $2}'
     echo "*******************************"
 }
 
@@ -160,10 +134,6 @@ ps_start_jenkins
 ## Init and start the firewall
 ps_init_firewall
 
-## Create user jenkins
-ps_verif_user_jenkins_exist
-ps_create_update_user_jenkins
-
 ## Install docker
 ps_install_docker
 
@@ -172,8 +142,7 @@ ps_display_initialAdminPassword
 
 ## Display ip machine for user
 ps_display_ipadress_machine
+
 echo ""
 echo "Success"
 echo "A reboot is required !!"
-
-
