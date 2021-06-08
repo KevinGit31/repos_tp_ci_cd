@@ -1,20 +1,19 @@
 -
   name: Playbook deploy via ansible
   hosts: group_env_deploy #hosts represente les hosts def dans targets.txt avec l'alias group1
+  become: yes
   vars:
-    directory_deploy:
-      - deploy
+    directory_deploy: "deploy"
+    file_yaml: "game-dpl.yml"
   tasks:
     - name: Test ping
       ping:
     
     - name: create folder
-      file: path={{item}} state=directory
-      loop: "{{directory_deploy}}"
+      file: path={{directory_deploy}} state=directory
 
     - name: copy file
-      copy: src='some file yml' dest={{directory_deploy}} owner={{item}}
-      loop: "{{directory_deploy}}"
+      copy: src={{file_yaml}} dest={{directory_deploy}}
         
-    - name: Deploy application test
-      ping:
+    - name: Deploy application
+      shell: sed "s/{{APP_VERSION}}/2/g" game-dpl.yml | kubectl apply -f
