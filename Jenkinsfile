@@ -59,7 +59,7 @@ pipeline {
         }
 		stage('after deploy') {
             steps {
-				sh 'echo waiting for pod & service is up'
+				sh "echo 'waiting for pod & service is up'"
                 sh 'sleep 10'
             }
         }
