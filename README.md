@@ -207,7 +207,8 @@ Nous allons cliquer sur la rubrique "pipeline", puis dans la partie "definition"
 "pipeline script from SCM" puis dans la partie "SCM", nous allons sélectionner "Git", "Repository URL" nous
 allons mettre l'url de notre dépot git qui est le suivant:  "https://github.com/KevinGit31/repos_tp_ci_cd".
 ​
-![repos_tp_ci_cd.](images/Capture_jenkins_10.PNG "jenkins.")
+![repos_tp_ci_cd.](images/Capture_jenkins_10_1.PNG "jenkins.")
+![repos_tp_ci_cd.](images/Capture_jenkins_10_2.PNG "jenkins.")
 ​
 Ensuite dans la partie "branches to build" "branch specifier" on va mettre "\*/main\" et par defaut, la partie "script path" sera "jenkinsfile"
 Une fois tous ces élément saisie, nous allons cliquer sur "sauver".
