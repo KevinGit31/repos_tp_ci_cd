@@ -25,7 +25,7 @@ Le document va se présenter en 3 parties:
 
 ### Architecture Applicative
 
-![Architecture Applicative.](images/Architecture_Applicative.png "Diagramme.")
+![Architecture Applicative.](images/Architecture_Applicative.PNG "Diagramme.")
 
 ## 0. Pré-requis
 
