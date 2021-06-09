@@ -40,9 +40,14 @@ Pour réaliser les installations de Vagrant et de Git nous passerons pas l'inter
 
 Veuillez suivre les étapes décrites dans la partie 2 de la page "Installating Chocolatey" que l'on retrouve en suivant l'url "chocolatey.org/install".
 
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/install_chocolatey.PNG "Install Chocolatey")
+
 ### Installation de VirtualBox
 
 Rendez-vous à l'url virtualbox.org/wiki/Downloads. Puis cliquez sur le lien "Windows hosts" dans la section "VirtualBox 6.1.22 platform packages".
+
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/install_vb.PNG "Install VirtualBox")
+
 Le téléchargement de l'installer de VirtualBox se lance.
 Aller dans le dossier téléchargement, double cliquer sur l'exécutable qui a été télécharger et suivre les étapes de l'installation de Virtualbox.
 
@@ -50,7 +55,12 @@ Aller dans le dossier téléchargement, double cliquer sur l'exécutable qui a �
 
 Pour installer vagrant ouvrir en tant qu'administrateur un invite de commande Windows (taper commande dans la barre de recherche de Windows).
 Puis taper la commande "choco install vagrant". Attendre la fin de l'installation.
+
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/choco_install_vagrant.PNG "Install Vagrant.")
+
 Ensuite pour installer Git taper la commande "choco install git.install". Attendre la fin de l'installation.
+
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/choco_install_git.PNG "Install Git.")
 
 ### Récupération du projet depuis Github
 
@@ -90,6 +100,12 @@ La création de la vm du serveur jenkins ne doit pas être lancée tant que le s
 
 Si la vm du serveur de déploiement est lancée seule via la commande "vagrant up envdeploy" dans un terminal ouvert dans le dossier source du projet alors il est nécessaire de détruire la vm jenkins puis de la recréer pour s'assurer de la bonne connexion entre les deux machines. Ceci à l'aide des commandes "vagrant destroy -f envjenkins" puis "vagrant up envjenkins" toutes deux tapées dans un terminal ouvert dans le dossier source du projet.
 
+Une fois l'installation faite, vous devez avoir ce message dans l'invite de commande:
+- le mot de passe initial de l'admin jenkins /!\ penser à le noter quelque part
+- l'ip du serveur jenkins pour pouvoir se connecter ici c'est 172.30.1.15:8080
+- Et si tout c'est bien passé, on affiche alors "Success" et "A reboot is required"
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_25.PNG "invit bash final.")
+
 ### Serveur de deploiement
 #### Installation de l'environnement Kubernetes
 
@@ -112,7 +128,223 @@ Enfin on lance Minikube, qui va donc tourner dès la création de la VM, sur le 
 
 #### Création du user jenkins
 
+Nous allons également créer un user "jenkins" qui sera utilisé par Jenkins lorsque le serveur jenkins se connectera au serveur de déploiement via le playbook Ansible.
+Première étape, créer le user : s'il existe déjà on le supprime et on le recrée, sinon on le crée.
+Deuxième étape, gérer ses droits : le user jenkins a besoin de droits d'admin pour pouvoir déployer le cluster Kubernetes à travers des commandes du playbook Ansible.
+Enfin on permet l'authentification par password pour permettre les étapes de configuration de la connexion ssh par le serveur jenkins dans la suite du déroulement.
+
 ### Serveur Jenkins
+
+Après l'installation terminé, nous allons redemarrer notre serveur jenkins. Pour cela nous taper la commande:
+​
+```
+vagrant halt envjenkins
+```
+​
+Puis, une fois le prompt nous ait remit, on tape la commande suivante:
+​
+```
+vagrant up envjenkins
+```
+​
+Voilà notre machine jenkins est up. Nous allons pouvoir passer à l'installation de notre jenkins côté web
+​
+### Serveur Jenkins partie web
+​
+Après avoir fait un up sur notre serveur jenkins, nous pouvons désormais le configurer sur la partie web.
+​
+Pour cela, nous allons ouvrir un navigateur (chrome, firefox...) et nous allons taper l'url suivant
+​
+```
+http://172.30.1.15:8080/
+```
+​
+Une fois l'url validé nous allons attérir sur une première fenêtre
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_1.PNG "jenkins.")
+​
+Il faudra saisir le mot de passe administrateur jenkins pour pouvoir de déploquer, une fois le mot de passe saisie,
+on va cliquer sur  "continuer" pour l'installation des plugins.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_2.PNG "jenkins.")
+​
+Nous allons cliquer sur l'option "Installer les plugins suggérés" et laisser jenkins installer tous les plugins qu'il lui faut pour bien fonctionner.
+Une fois terminer allons devoir créer le premier utilisateur administrateur de jenkins.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_3.PNG "jenkins.")
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_4.PNG "jenkins.")
+​
+Pour la création du premier utilisateur, nous vous recommandons, des identiants que vous puissez garder quelques part sans les oublier,
+ils vous seront utils. Une fois créé, nous allons passer à la configuration de l'instance.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_5.PNG "jenkins.")
+​
+Pour la configuration de l'instance jenkins, laisser les valeurs par défaut, puis cliquer sur "sauver et continuer".
+Voilà, jenkins est prêt. :)
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_6.PNG "jenkins.")
+​
+Cliquer sur "commencer à utiliser jenkins".
+​
+Nous voilà sur l'interface de jenkins.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_7.PNG "jenkins.")
+​
+Nous allons créer notre premier pipeline qui va nous permettre de faire du CI/CD. Cliquer sur le bouton "créer un job".
+Une nouvelle fenêtre va s'afficher:
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_8.PNG "jenkins.")
+​
+Nous allons saisir un nom et quel type de job que nous voulons créer. Dans la rubrique "saisissez un nom" on va le nommer "Deploy",
+puis nous aller cliquer sur l'option "pipeline" pour avoir un job jenkins de type "pipeline". Et enfin pour valider nous allons cliquer sur "OK" pour valider notre choix.
+​
+Une fois validée, nous allons configurer notre pipeline:
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_9.PNG "jenkins.")
+​
+Nous allons cliquer sur la rubrique "pipeline", puis dans la partie "definition" on va sélectionner
+"pipeline script from SCM" puis dans la partie "SCM", nous allons sélectionner "Git", "Repository URL" nous
+allons mettre l'url de notre dépot git qui est le suivant:  "https://github.com/KevinGit31/repos_tp_ci_cd".
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_10.PNG "jenkins.")
+​
+Ensuite dans la partie "branches to build" "branch specifier" on va mettre "\*/main\" et par defaut, la partie "script path" sera "jenkinsfile"
+Une fois tous ces élément saisie, nous allons cliquer sur "sauver".
+​
+Voilà, notre job pipeline a été créé.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_11.PNG "jenkins.")
+​
+Nous allons passer à la partie administration, nous allons cliquer sur "administrer jenkins" qui se trouve sur le menu de gauche.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_12.PNG "jenkins.")
+​
+Une fois arriver sur la page d'administration de jenkins, nous allons cliquer sur la rubrique "gestion des plugins" c'est le petit logo vert :)
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_13.PNG "jenkins.")
+​
+Une fois arrivé sur la page de gestion des plugins, on va cliquer sur l'onglet "Disponibles" et dans la barre de recherche nous allons taper le mot clé
+"docker" puis sélectionner le plugin "docker pipeline", nous allons cocher la petite case et ensuite cliquer sur "download now and install after restart"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_14.PNG "jenkins.")
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_14_1.PNG "jenkins.")
+​
+Une fois après avoir cliquer sur "download now and install after restart", une nouvelle fenêtre va s'afficher, on va laisser jenkins
+installer le plugin puis une fois le plugin installer, nous allons cocher la case "Redémarrer jenkins quand l'installation est terminée et qu'aucun job n'est en cours"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_15.PNG "jenkins.")
+​
+Faite un petit f5 pour rafraichir la page, quand jenkins aura redémarré, il vous demandera vos identiants saisis lors de la création du utilisateur administrateur.
+​
+Une fois sur l'interface de jenkins, nous allons cliquer sur administrer jenkins sur le menu de gauche.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_11.PNG "jenkins.")
+​
+Puis nous allons cliquer sur le menu "Manage credentials" nous allons renseigner nos credentials pour pouvoir,
+push notre image docker sur le dockerhub.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_12.PNG "jenkins.")
+​
+Une fois arriver sur la page manage credentials, nous allons cliquer sur "Jenkins" dans la rubrique "Stores scoped to jenkins"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_16.PNG "jenkins.")
+​
+Une fois arriver sur la nouvelle page, on va cliquer sur "Identifiants globaux" qui se trouve dans la rubrique "System"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_17.PNG "jenkins.")
+​
+Nous allons arriver sur une nouvelle page, nous allons cliquer sur le menu "Ajouter des identiants" qui se trouve sur le menu de gauche.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_18.PNG "jenkins.")
+​
+Une fois après avoir cliqué sur "Ajouter des identiants", nous allons arriver sur une page pour pouvoir ajouter notre nouveau credentials.
+Pour info les informations présentes sur la capture d'écran doivent être recopié telles qu'elles le sont.
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_19.PNG "jenkins.")
+​
+Type: Nom d'utilisateur et mot de passe
+Portée: global(Jenkins, agents, items, etc...)
+Nom d'utilisateur: kevin31300
+Mot de passe: 19051905?Ke
+La case "Treat username as secret" doit être cochée
+ID: kevin_docker_hub_token
+Description: credentials to login to docker (il y a une petite faute)
+​
+Une fois les informations notés on peut cliquer sur "OK" pour valider la création de notre credentials, qui servir à notre pipeline précédement créé
+pour pouvoir pousser des images docker dans le hub docker.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_20.PNG "jenkins.")
+​
+Une fois terminé, nous allons cliquer sur l'onglet "tableau de bord" puis cliquer sur notre job pipeline "Deploy"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_11.PNG "jenkins.")
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_21.PNG "jenkins.")
+​
+Une fois ces deux étapes faites, nous pouvons lancer notre pipeline qui va récupérer notre code source puis en faire une
+image docker puis la tester si tout se passe bien alors nous allons pousser notre image sur le docker hub et enfin notre processus
+de "deploy" qui va lancer un playbook ansible pour mettre à jour l'application sur les différents environnement (test, dev, prod).
+​
+### Serveur de déploiement installation final admin
+​
+Une fois l'installation de notre solution CI/CD terminé, nous allons répéter les étapes qui vont suivre.
+​
+nous allons nous mettre sur le répertoire "repos_tp_ci_cd".
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_22.PNG "Directory.")
+​
+Puis faire un clic droit dans le répertoire et ensuite cliquer sur l'option "git bash here"
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_23.PNG "Directory.")
+​
+Une fois après avoir cliqué sur l'option "git bash here" une invite de commande va s'affichier.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_24.PNG "invit bash.")
+​
+Une fois l'invite de commande s'affiche, nous allons taper la commande suivante:
+​
+```
+vagrant ssh envdeploy
+```
+Cette commande va nous permettre de nous connecter en ssh sur le serveur de deploiement.
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_26.PNG "invit bash.")
+​
+​
+Puis, une fois le prompt nous ait remit, on tape la commande suivante:
+​
+```
+sudo su
+```
+​
+Elle va nous permettre de nous connecter en tant que admin sur notre serveur de deploiement, une fois connecté,
+on va taper la commande suivante:
+​
+```
+systemctl enable kubelet.service
+```
+Cette commande va activer kubelet sur notre serveur de deploiement. Une fois activé nous allons supprimer minikube
+avec la commande suivante:
+​
+```
+sudo minikube delete
+```
+​
+Une fois le prompt nous ait remis, nous allons réinstaller minikube, avec la commande suivante
+​
+```
+sudo minikube start --driver=none
+```
+​
+Et enfin une fois l'installation fini, nous pouvons vérifier que minikube est bien "running" avec la commande:
+​
+```
+minikube status
+```
+​
+![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/Capture_jenkins_27.PNG "invit bash.")
+​
 
 
 ## 3. Fonctionnement du CICD
