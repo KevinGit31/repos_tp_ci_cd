@@ -40,7 +40,7 @@ Pour réaliser les installations de Vagrant et de Git nous passerons pas l'inter
 
 Veuillez suivre les étapes décrites dans la partie 2 de la page "Installating Chocolatey" que l'on retrouve en suivant l'url "chocolatey.org/install".
 
-![repos_tp_ci_cd.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/readme/images/install_chocolatey.PNG "Install Chocolatey")
+![repos_tp_ci_cd.](https://github.com/KevinGit31/repos_tp_ci_cd/tree/main/images/install_chocolatey.PNG "Install Chocolatey")
 
 ### Installation de VirtualBox
 
