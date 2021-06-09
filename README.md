@@ -25,7 +25,7 @@ Le document va se présenter en 3 parties:
 
 ### Architecture Applicative
 
-![Architecture Applicative.](https://raw.githubusercontent.com/KevinGit31/depot-application-python_v1/readme/diagramme/Architecture_Applicative.png "Diagramme.")
+![Architecture Applicative.](https://raw.githubusercontent.com/KevinGit31/repos_tp_ci_cd/images/Architecture_Applicative.png "Diagramme.")
 
 ## 0. Pré-requis
 
